@@ -1,11 +1,11 @@
 .samples {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
 }
 
 .sample {
-  width: 200px;
+  width: 143px;
   height: 200px;
   border: dashed 2px gray;
   margin: 30px;
@@ -37,6 +37,6 @@
   margin: 30px;
 }
 
-.ngx-ellipsis-more {
+.ngx-nested-ellipsis-more {
   padding-left: 3px;
 }

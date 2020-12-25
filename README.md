@@ -1,6 +1,6 @@
 # ngx-nested-ellipsis
 
-Library for angular (>= 6.0.0) providing a directive to display an ellipsis if the containing text would overflow.
+Library for angular (>= 9.0.0) providing a directive to display an ellipsis if the containing text would overflow.
 
 Supports dynamic html contents. (If you require text contents only, you might want to take a look at [ngx-ellipsis](https://github.com/lentschi/ngx-ellipsis), which offers better performance, but escapes any html contents to text.)
 

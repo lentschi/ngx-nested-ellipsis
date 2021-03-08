@@ -160,5 +160,8 @@
       }
     }
   },
-  "defaultProject": "ngx-nested-ellipsis"
+  "defaultProject": "ngx-nested-ellipsis",
+  "cli": {
+    "analytics": false
+  }
 }

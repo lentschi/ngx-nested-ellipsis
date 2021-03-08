@@ -69,7 +69,9 @@ export class NestedEllipsisDirective implements OnInit, OnDestroy, AfterViewChec
 
   private previousDimensions: {
     width: number,
-    height: number
+    height: number,
+    scrollWidth: number,
+    scrollHeight: number
   };
 
   /**
@@ -209,7 +211,9 @@ export class NestedEllipsisDirective implements OnInit, OnDestroy, AfterViewChec
     this.restoreView();
     this.previousDimensions = {
       width: this.elem.clientWidth,
-      height: this.elem.clientHeight
+      height: this.elem.clientHeight,
+      scrollWidth: this.elem.scrollWidth,
+      scrollHeight: this.elem.scrollHeight
     };
 
     this.applyEllipsis();
@@ -353,13 +357,20 @@ export class NestedEllipsisDirective implements OnInit, OnDestroy, AfterViewChec
   private addResizeObserver() {
     const resizeObserver = new ResizeObserver(() => {
       window.requestAnimationFrame(() => {
-        if (this.previousDimensions.width !== this.elem.clientWidth || this.previousDimensions.height !== this.elem.clientHeight) {
+        if (
+          this.previousDimensions.width !== this.elem.clientWidth
+          || this.previousDimensions.height !== this.elem.clientHeight
+          || this.previousDimensions.scrollWidth !== this.elem.scrollWidth
+          || this.previousDimensions.scrollHeight !== this.elem.scrollHeight
+        ) {
           this.ngZone.run(() => {
             this.applyEllipsis();
           });
 
           this.previousDimensions.width = this.elem.clientWidth;
           this.previousDimensions.height = this.elem.clientHeight;
+          this.previousDimensions.scrollWidth = this.elem.scrollWidth;
+          this.previousDimensions.scrollHeight = this.elem.scrollHeight;
         }
       });
     });

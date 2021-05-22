@@ -250,7 +250,9 @@ export class NestedEllipsisDirective implements OnInit, OnDestroy, AfterViewChec
    */
   private nodesToHtml(nodes: Node[]): string {
     const div = <HTMLElement> this.renderer.createElement('div');
-    div.append(...nodes.map(node => node.cloneNode(true)));
+    for (const node of nodes) {
+      this.renderer.appendChild(div, node.cloneNode(true));
+    }
     return div.innerHTML;
   }
 
@@ -432,10 +434,10 @@ export class NestedEllipsisDirective implements OnInit, OnDestroy, AfterViewChec
 
     for (let i = foundIndex + 1; i < nodes.length; i++) {
       const node = nodes[i];
-      if (node.textContent !== '' && node.parentElement !== this.elem && node.parentElement.childNodes.length === 1) {
-        node.parentElement.remove();
+      if (node.textContent !== '' && node.parentNode !== this.elem && node.parentNode.childNodes.length === 1) {
+        this.renderer.removeChild(node.parentNode.parentNode, node.parentNode);
       } else {
-        node.remove();
+        this.renderer.removeChild(node.parentNode, node);
       }
     }
 

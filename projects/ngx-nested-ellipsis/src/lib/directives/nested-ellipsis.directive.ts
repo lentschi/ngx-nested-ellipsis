@@ -16,12 +16,14 @@ import {
   AfterViewChecked,
   OnInit
 } from '@angular/core';
-import ResizeObserver from 'resize-observer-polyfill';
+import { ResizeObserver as ResizeObserverPonyfill } from '@juggle/resize-observer';
 import { isPlatformBrowser } from '@angular/common';
 import { NestedEllipsisContentComponent } from '../components/nested-ellipsis-content.component';
 import { EllipsisResizeDetectionEnum } from '../enums/ellipsis-resize-detection.enum';
 import { Subject } from 'rxjs';
 import { take } from 'rxjs/operators';
+
+const ResizeObserver = (<any> window).ResizeObserver || ResizeObserverPonyfill;
 
 /**
  * Directive to truncate the contained text, if it exceeds the element's boundaries

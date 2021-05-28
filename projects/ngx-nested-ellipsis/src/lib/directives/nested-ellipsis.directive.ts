@@ -23,7 +23,7 @@ import { EllipsisResizeDetectionEnum } from '../enums/ellipsis-resize-detection.
 import { Subject } from 'rxjs';
 import { take } from 'rxjs/operators';
 
-const ResizeObserver = (<any> window).ResizeObserver || ResizeObserverPonyfill;
+let ResizeObserver = ResizeObserverPonyfill;
 
 /**
  * Directive to truncate the contained text, if it exceeds the element's boundaries
@@ -188,6 +188,11 @@ export class NestedEllipsisDirective implements OnInit, OnDestroy, AfterViewChec
       // DOM manipulation properties we sadly need to access here,
       // so wait until we're in the browser:
       return;
+    }
+
+    // Prefer native ResizeObserver over ponyfill, if available:
+    if ((<any> window).ResizeObserver != null) {
+      ResizeObserver = (<any> window).ResizeObserver;
     }
 
     if (typeof(this.active) !== 'boolean') {

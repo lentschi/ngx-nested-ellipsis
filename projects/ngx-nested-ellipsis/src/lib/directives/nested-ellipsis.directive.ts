@@ -439,10 +439,10 @@ export class NestedEllipsisDirective implements OnInit, OnDestroy, AfterViewChec
 
     for (let i = foundIndex + 1; i < nodes.length; i++) {
       const node = nodes[i];
-      if (node.textContent !== '' && node.parentNode !== this.elem && node.parentNode.childNodes.length === 1) {
-        this.renderer.removeChild(node.parentNode.parentNode, node.parentNode);
+      if (node.textContent !== '' && node.parentNode !== this.elem && node.parentNode?.childNodes.length === 1) {
+        node.parentNode.parentNode?.removeChild(node.parentNode);
       } else {
-        this.renderer.removeChild(node.parentNode, node);
+        node.parentNode?.removeChild(node);
       }
     }
 

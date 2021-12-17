@@ -17,8 +17,8 @@
     ],
     "paths": {
       "ngx-nested-ellipsis": [
-        "dist/ngx-nested-ellipsis/ngx-nested-ellipsis",
-        "dist/ngx-nested-ellipsis"
+        "/dist/ngx-nested-ellipsis/ngx-nested-ellipsis",
+        "/dist/ngx-nested-ellipsis"
       ]
     }
   }

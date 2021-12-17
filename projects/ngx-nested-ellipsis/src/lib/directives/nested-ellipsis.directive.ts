@@ -82,7 +82,7 @@ export class NestedEllipsisDirective implements OnInit, OnDestroy, AfterViewChec
    * Passing true (default) will perform the directive's task,
    * otherwise the template will be rendered without truncating its contents.
    */
-  @Input('nestedEllipsis') active?: boolean;
+  @Input('nestedEllipsis') active? = true;
 
   /**
    * The ellipsisIndicator html attribute

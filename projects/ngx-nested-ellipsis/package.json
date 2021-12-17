@@ -1,7 +1,7 @@
 {
   "name": "ngx-nested-ellipsis",
   "version": "2.0.1",
-  "description": "Nested multiline html with ellipsis for angular 9+",
+  "description": "Nested multiline html with ellipsis for angular 12+",
   "author": "Florian Lentsch",
   "license": "MIT",
   "readme": "README.md",

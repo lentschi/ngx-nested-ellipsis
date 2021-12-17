@@ -11,13 +11,14 @@ import {
   TemplateRef,
   ViewContainerRef,
   ComponentFactoryResolver,
-  ComponentFactory,
   EmbeddedViewRef,
   AfterViewChecked,
-  OnInit
+  OnInit,
+  ComponentFactory,
+  ComponentRef
 } from '@angular/core';
 import { ResizeObserver as ResizeObserverPonyfill } from '@juggle/resize-observer';
-import { isPlatformBrowser } from '@angular/common';
+import { isPlatformBrowser, VERSION } from '@angular/common';
 import { NestedEllipsisContentComponent } from '../components/nested-ellipsis-content.component';
 import { EllipsisResizeDetectionEnum } from '../enums/ellipsis-resize-detection.enum';
 import { Subject } from 'rxjs';
@@ -40,9 +41,9 @@ export class NestedEllipsisDirective implements OnInit, OnDestroy, AfterViewChec
   private elem: HTMLElement;
 
   /**
-   * Component factory required for rendering EllipsisContent component
+   * Component factory required for rendering EllipsisContent component in angular < 13
    */
-  private compFactory: ComponentFactory<NestedEllipsisContentComponent>;
+   private legacyCompFactory?: ComponentFactory<NestedEllipsisContentComponent>;
 
   /**
    * ViewRef of the main template (the one to be truncated)
@@ -81,7 +82,7 @@ export class NestedEllipsisDirective implements OnInit, OnDestroy, AfterViewChec
    * Passing true (default) will perform the directive's task,
    * otherwise the template will be rendered without truncating its contents.
    */
-  @Input('nestedEllipsis') active: boolean;
+  @Input('nestedEllipsis') active?: boolean;
 
   /**
    * The ellipsisIndicator html attribute
@@ -120,7 +121,7 @@ export class NestedEllipsisDirective implements OnInit, OnDestroy, AfterViewChec
    * This emits after which index the text has been truncated.
    * If it hasn't been truncated, null is emitted.
    */
-  @Output('nestedEllipsisChange') readonly change: EventEmitter<number> = new EventEmitter();
+  @Output('nestedEllipsisChange') readonly ellipsisChange: EventEmitter<number> = new EventEmitter();
 
   /**
    * Utility method to quickly find the largest number for
@@ -214,7 +215,9 @@ export class NestedEllipsisDirective implements OnInit, OnDestroy, AfterViewChec
     this.wordBoundaries = '[' + this.wordBoundaries.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&') + ']';
 
     // initialize view:
-    this.compFactory = this.resolver.resolveComponentFactory(NestedEllipsisContentComponent);
+    if (parseInt(VERSION.major, 10) < 13) {
+      this.legacyCompFactory = this.resolver.resolveComponentFactory(NestedEllipsisContentComponent);
+    }
     this.restoreView();
     this.previousDimensions = {
       width: this.elem.clientWidth,
@@ -307,9 +310,18 @@ export class NestedEllipsisDirective implements OnInit, OnDestroy, AfterViewChec
     this.viewContainer.clear();
     this.templateView = this.templateRef.createEmbeddedView({});
     this.templateView.detectChanges();
-    const componentRef = this.viewContainer.createComponent(
-      this.compFactory, null, this.viewContainer.injector, [this.templateView.rootNodes]
-    );
+
+    let componentRef: ComponentRef<NestedEllipsisContentComponent>;
+    if (this.legacyCompFactory != null) {
+      componentRef = this.viewContainer.createComponent(
+        this.legacyCompFactory, null, this.viewContainer.injector, [this.templateView.rootNodes]
+      );
+    } else {
+      componentRef = this.viewContainer.createComponent(NestedEllipsisContentComponent, {
+        injector: this.viewContainer.injector,
+        projectableNodes: [this.templateView.rootNodes]
+      });
+    }
     this.elem = componentRef.instance.elementRef.nativeElement;
     this.initialTextLength = this.currentLength;
 
@@ -511,9 +523,9 @@ export class NestedEllipsisDirective implements OnInit, OnDestroy, AfterViewChec
     this.addResizeListener();
 
     // Emit change event:
-    if (this.change.observers.length > 0) {
+    if (this.ellipsisChange.observers.length > 0) {
       const currentLength = this.currentLength;
-      this.change.emit(
+      this.ellipsisChange.emit(
         (currentLength === this.initialTextLength) ? null : currentLength
       );
     }

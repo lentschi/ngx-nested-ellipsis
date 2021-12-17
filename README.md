@@ -1,6 +1,6 @@
 # ngx-nested-ellipsis
 
-Library for angular (>= 9.0.0) providing a directive to display an ellipsis if the containing text would overflow.
+Library for angular (>= 12.0.0) providing a directive to display an ellipsis if the containing text would overflow.
 
 Supports dynamic html contents. (If you require text contents only, you might want to take a look at [ngx-ellipsis](https://github.com/lentschi/ngx-ellipsis), which offers better performance, but escapes any html contents to text.)
 
@@ -71,7 +71,7 @@ Return `true` if truncating at this point in this node should be allowed.
 
 In case you want to contribute/fork:
 
-1. Run `npm install`
+1. Run `npm ci`
 1. Adept version and author in `./projects/ngx-nested-ellipsis/package.json` and commit the changes to your fork.
 1. Run `npm run build-lib` which outputs the build to `./dist/ngx-nested-ellipsis`.
 1. Copy README.md to `./dist/ngx-nested-ellipsis` and modify it accordingly.
@@ -80,7 +80,7 @@ In case you want to contribute/fork:
 
 ## Running unit tests
 
-Run `npm run test ngx-nested-ellipsis` to execute the unit tests via [Karma](https://karma-runner.github.io).
+Run `npm run test` to execute the unit tests via [Karma](https://karma-runner.github.io).
 
 ## Thank you...
 

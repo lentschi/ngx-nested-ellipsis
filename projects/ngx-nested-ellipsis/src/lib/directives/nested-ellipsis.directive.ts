@@ -17,14 +17,11 @@ import {
   ComponentFactory,
   ComponentRef
 } from '@angular/core';
-import { ResizeObserver as ResizeObserverPonyfill } from '@juggle/resize-observer';
 import { isPlatformBrowser, VERSION } from '@angular/common';
 import { NestedEllipsisContentComponent } from '../components/nested-ellipsis-content.component';
 import { EllipsisResizeDetectionEnum } from '../enums/ellipsis-resize-detection.enum';
 import { Subject } from 'rxjs';
 import { take } from 'rxjs/operators';
-
-let ResizeObserver = ResizeObserverPonyfill;
 
 /**
  * Directive to truncate the contained text, if it exceeds the element's boundaries
@@ -189,11 +186,6 @@ export class NestedEllipsisDirective implements OnInit, OnDestroy, AfterViewChec
       // DOM manipulation properties we sadly need to access here,
       // so wait until we're in the browser:
       return;
-    }
-
-    // Prefer native ResizeObserver over ponyfill, if available:
-    if ((<any> window).ResizeObserver != null) {
-      ResizeObserver = (<any> window).ResizeObserver;
     }
 
     if (typeof(this.active) !== 'boolean') {

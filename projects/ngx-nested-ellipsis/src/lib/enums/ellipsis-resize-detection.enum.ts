@@ -5,7 +5,6 @@ export const enum EllipsisResizeDetectionEnum {
   /**
    * Use native ResizeObserver
    * See https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver
-   * and https://github.com/juggle/resize-observer
    */
   ResizeObserver = 'resize-observer',
 

@@ -53,7 +53,7 @@ You may add the following attributes to change the directive's behavior:
 | __nestedEllipsisIndicator__ | Passing a string (default: '...') will append it when the passed template has been truncated. Passing a template will append that template instead. |
 | __nestedEllipsisWordBoundaries__ | If you pass this attribute, the text won't be truncated at just any character but only at those in the attribute's value. For example `nestedEllipsisWordBoundaries=" "` will allow the text to break at spaces only |
 | __nestedEllipsisMayTruncateAtFn__ | Function that lets you specify whether the contents may be truncated at a certain point or not. (see [callback API](#nestedellipsismaytruncateatfn-api)) |
-| __nestedEllipsisResizeDetection__ | How resize events should be detected - these are the possible values: <ul><li>__resize-observer__: _default_ Use native ResizeObserver or a ponyfill if not implemented by the browser (See [Web/API/ResizeObserver](https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver) and [@juggle/resize-observer](https://github.com/juggle/resize-observer))</li><li>__window__: Only listen if the whole window has been resized/changed orientation (Possibly better performance, but obviously won't trigger on resize caused directly or indirectly by javascript.)</li><li>__manual__: Ellipsis is never applied automatically. Instead the consuming app may use `#ell="ngxNestedEllipsis"` in the template and `this.ell.applyEllipsis()` in the component code.</li></ul> |
+| __nestedEllipsisResizeDetection__ | How resize events should be detected - these are the possible values: <ul><li>__resize-observer__: _default_ Use native ResizeObserver or a ponyfill if not implemented by the browser (See [Web/API/ResizeObserver](https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver))</li><li>__window__: Only listen if the whole window has been resized/changed orientation (Possibly better performance, but obviously won't trigger on resize caused directly or indirectly by javascript.)</li><li>__manual__: Ellipsis is never applied automatically. Instead the consuming app may use `#ell="ngxNestedEllipsis"` in the template and `this.ell.applyEllipsis()` in the component code.</li></ul> |
 | __nestedEllipsisChange__ | Event emitter - Will be emitted whenever the ellipsis has been recalculated (depending on `nestedEllipsisResizeDetection`). If the text had to be truncated the position of the last visible character will be emitted, else `null`.|
 
 ### nestedEllipsisMayTruncateAtFn API
@@ -81,10 +81,6 @@ In case you want to contribute/fork:
 ## Running unit tests
 
 Run `npm run test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Thank you...
-
-- ... __Tremayne Christ__ for writing the [@juggle/resize-observer](https://github.com/juggle/resize-observer) package which is internally used by this module.
 
 ## License
 

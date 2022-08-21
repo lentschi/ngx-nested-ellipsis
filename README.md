@@ -72,10 +72,9 @@ Return `true` if truncating at this point in this node should be allowed.
 In case you want to contribute/fork:
 
 1. Run `npm ci`
-1. Adept version and author in `./projects/ngx-nested-ellipsis/package.json` and commit the changes to your fork.
+1. Adept version and author in `./projects/ngx-nested-ellipsis/package.json` and `./README` and commit the changes to your fork.
 1. Run `npm run build-lib` which outputs the build to `./dist/ngx-nested-ellipsis`.
-1. Copy README.md to `./dist/ngx-nested-ellipsis` and modify it accordingly.
-1. Run `cd ./dist/ngx-nested-ellipsis && npm publish`.
+1. To publish your build, run `npm run release-lib`.
 
 
 ## Running unit tests

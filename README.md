@@ -74,7 +74,7 @@ In case you want to contribute/fork:
 1. Run `npm ci`
 1. Adept version and author in `./projects/ngx-nested-ellipsis/package.json` and `./README` and commit the changes to your fork.
 1. Run `npm run build-lib` which outputs the build to `./dist/ngx-nested-ellipsis`.
-1. To publish your build, run `npm run release-lib`.
+1. To publish your build, run `npm run publish-lib`.
 
 
 ## Running unit tests

@@ -35,7 +35,7 @@ export class NestedEllipsisDirective implements OnInit, OnDestroy, AfterViewChec
   /**
    * The referenced element
    */
-  private elem: HTMLElement;
+  private elem?: HTMLElement;
 
   /**
    * Component factory required for rendering EllipsisContent component in angular < 13
@@ -300,6 +300,10 @@ export class NestedEllipsisDirective implements OnInit, OnDestroy, AfterViewChec
    */
   private restoreView() {
     this.viewContainer.clear();
+    if (this.elem != null && document.body.contains(this.elem)) {
+      // Workaround for https://github.com/lentschi/ngx-nested-ellipsis/issues/17:
+      this.renderer.setStyle(this.elem, 'display', 'none');
+    }
     this.templateView = this.templateRef.createEmbeddedView({});
     this.templateView.detectChanges();
 

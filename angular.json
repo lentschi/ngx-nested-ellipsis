@@ -140,7 +140,6 @@
       }
     }
   },
-  "defaultProject": "ngx-nested-ellipsis",
   "cli": {
     "analytics": false
   }

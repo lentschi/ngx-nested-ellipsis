@@ -1,11 +1,11 @@
 import { Component, ElementRef } from '@angular/core';
 
 @Component({
-    selector: 'nested-ellipsis-content',
-    template: `
+  selector: 'nested-ellipsis-content',
+  template: `
     <ng-content></ng-content>
   `,
-    styles: [`
+  styles: [`
     :host {
       display: block;
       width: 100%;
@@ -13,8 +13,8 @@ import { Component, ElementRef } from '@angular/core';
       overflow: hidden;
     }
   `],
-    standalone: true
-})
+  standalone: true
+  })
 export class NestedEllipsisContentComponent {
   constructor(public elementRef: ElementRef) {}
 }

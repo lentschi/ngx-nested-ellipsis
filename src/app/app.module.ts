@@ -9,15 +9,15 @@ import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
-    AppComponent
+  AppComponent
   ],
   imports: [
-    BrowserModule,
-    NestedEllipsisModule,
-    CommonModule,
-    FormsModule
+  BrowserModule,
+  NestedEllipsisModule,
+  CommonModule,
+  FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
-})
+  })
 export class AppModule { }

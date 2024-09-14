@@ -24,7 +24,7 @@ const ELLIPSIS_TEST_CSS = `
     </div>
   `,
   styles: [ ELLIPSIS_TEST_CSS ]
-})
+  })
 class StaticTestComponent {
 }
 
@@ -39,7 +39,7 @@ class StaticTestComponent {
     </div>
   `,
   styles: [ ELLIPSIS_TEST_CSS ]
-})
+  })
 class DynamicTestComponent {
   htmlContent = '<b>Lorem ipsum</b> dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt';
   wordBoundaries = ' \n';
@@ -61,7 +61,7 @@ class DynamicTestComponent {
     </div>
   `,
   styles: [ ELLIPSIS_TEST_CSS ]
-})
+  })
 class NumberTestComponent {
   htmlContent = 0;
 }

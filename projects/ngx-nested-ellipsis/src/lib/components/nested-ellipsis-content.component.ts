@@ -13,7 +13,7 @@ import { Component, ElementRef } from '@angular/core';
       overflow: hidden;
     }
   `]
-})
+  })
 export class NestedEllipsisContentComponent {
   constructor(public elementRef: ElementRef) {}
 }

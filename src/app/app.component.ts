@@ -4,7 +4,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
-})
+  })
 export class AppComponent implements OnInit, OnDestroy {
   longText = '<em>Lorem ipsum</em> dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt \
               ut labore et dolore magna \

@@ -30,7 +30,7 @@ import { take } from 'rxjs/operators';
 @Directive({
   selector: '[nestedEllipsis]',
   exportAs: 'ngxNestedEllipsis'
-})
+  })
 export class NestedEllipsisDirective implements OnInit, OnDestroy, AfterViewChecked {
   /**
    * The referenced element

@@ -6,5 +6,5 @@ import { NestedEllipsisContentComponent } from './components/nested-ellipsis-con
   imports: [],
   declarations: [NestedEllipsisDirective, NestedEllipsisContentComponent],
   exports: [NestedEllipsisDirective]
-})
+  })
 export class NestedEllipsisModule { }

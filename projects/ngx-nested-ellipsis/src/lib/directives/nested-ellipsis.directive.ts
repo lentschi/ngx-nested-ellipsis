@@ -23,6 +23,8 @@ import { EllipsisResizeDetectionEnum } from '../enums/ellipsis-resize-detection.
 import { Subject } from 'rxjs';
 import { take } from 'rxjs/operators';
 
+const nodeTypesToProcess: number[] = [Node.TEXT_NODE, Node.ELEMENT_NODE];
+
 /**
  * Directive to truncate the contained text, if it exceeds the element's boundaries
  * and append characters (configurable, default '...') if so.
@@ -40,7 +42,7 @@ export class NestedEllipsisDirective implements OnInit, OnDestroy, AfterViewChec
   /**
    * Component factory required for rendering EllipsisContent component in angular < 13
    */
-   private legacyCompFactory?: ComponentFactory<NestedEllipsisContentComponent>;
+  private legacyCompFactory?: ComponentFactory<NestedEllipsisContentComponent>;
 
   /**
    * ViewRef of the main template (the one to be truncated)
@@ -405,7 +407,7 @@ export class NestedEllipsisDirective implements OnInit, OnDestroy, AfterViewChec
   private truncateContents(max: number): Node {
     this.restoreView();
     const nodes = <(HTMLElement | CharacterData)[]>this.flattenTextAndElementNodes(this.elem)
-      .filter(node => [Node.TEXT_NODE, Node.ELEMENT_NODE].includes(node.nodeType));
+      .filter(node => nodeTypesToProcess.includes(node.nodeType));
 
     let foundIndex = -1;
     let foundNode: Node;
@@ -459,7 +461,7 @@ export class NestedEllipsisDirective implements OnInit, OnDestroy, AfterViewChec
 
   private get currentLength(): number {
     return this.flattenTextAndElementNodes(this.elem)
-      .filter(node => [Node.TEXT_NODE, Node.ELEMENT_NODE].includes(node.nodeType))
+      .filter(node => nodeTypesToProcess.includes(node.nodeType))
       .map(node => (node instanceof CharacterData) ? node.data.length : 1)
       .reduce((sum, length) => sum + length, 0);
   }

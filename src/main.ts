@@ -14,6 +14,6 @@ if (environment.production) {
 }
 
 bootstrapApplication(AppComponent, {
-    providers: []
+  providers: []
 })
   .catch(err => console.error(err));

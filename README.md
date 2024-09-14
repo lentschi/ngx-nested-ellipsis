@@ -1,6 +1,6 @@
 # ngx-nested-ellipsis
 
-Library for angular (>= 12.0.0) providing a directive to display an ellipsis if the containing text would overflow.
+Library for angular (>= 16.0.0) providing a directive to display an ellipsis if the containing text would overflow.
 
 Supports dynamic html contents. (If you require text contents only, you might want to take a look at [ngx-ellipsis](https://github.com/lentschi/ngx-ellipsis), which offers better performance, but escapes any html contents to text.)
 
@@ -12,28 +12,22 @@ For a demo either just checkout this project and run `npm install && npm run sta
 
 For use in an existing angular project run `npm install ngx-nested-ellipsis --save`.
 
-Then add the installed module to your `app.module.ts`:
+Then add the directive to the component, in which you want to use the ellipsis:
 
 ```typescript
-import { NestedEllipsisModule } from 'ngx-nested-ellipsis';
+import { NestedEllipsisDirective } from 'ngx-nested-ellipsis';
 
-// ...
-
-@NgModule({
+@Component({
   // ...
   imports: [
     // ...
-    NestedEllipsisModule
+    NestedEllipsisDirective
   ]
-  // ...
+  standalone: true
 })
-export class AppModule {}
+export class YourFancyComponent {}
 
 ```
-
-### Note
-
-If you're using the new angular [standalone components/directives/pipes](https://blog.angular-university.io/angular-standalone-components/) in your project (available since angular 16), you'll need to add `NestedEllipsisModule` to each consuming components' imports instead.
 
 ## Usage
 
@@ -46,6 +40,10 @@ Anywhere in your template:
 ```
 
 As you can see, you need to define the dimensions of your element yourself. (ngx-nested-ellipsis doesn't automatically add any element styles.) But of course you don't need to use fixed widths/heights like in these examples. Flex layout shold work just fine for example.
+
+### Module import
+
+Should you not be using [angular standalone components](https://blog.angular-university.io/angular-standalone-components/) in your project (available since angular 16), import `NestedEllipsisModule` in your module instead - see [old instructions](https://github.com/lentschi/ngx-nested-ellipsis/blob/v2.1.5/README.md#installation) for an example.
 
 ### Extra options
 

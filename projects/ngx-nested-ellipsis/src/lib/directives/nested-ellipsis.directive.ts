@@ -10,12 +10,9 @@ import {
   PLATFORM_ID,
   TemplateRef,
   ViewContainerRef,
-  ComponentFactoryResolver,
   EmbeddedViewRef,
   AfterViewChecked,
   OnInit,
-  ComponentFactory,
-  ComponentRef
 } from '@angular/core';
 import { isPlatformBrowser, VERSION } from '@angular/common';
 import { NestedEllipsisContentComponent } from '../components/nested-ellipsis-content.component';
@@ -38,11 +35,6 @@ export class NestedEllipsisDirective implements OnInit, OnDestroy, AfterViewChec
    * The referenced element
    */
   private elem?: HTMLElement;
-
-  /**
-   * Component factory required for rendering EllipsisContent component in angular < 13
-   */
-  private legacyCompFactory?: ComponentFactory<NestedEllipsisContentComponent>;
 
   /**
    * ViewRef of the main template (the one to be truncated)
@@ -172,7 +164,6 @@ export class NestedEllipsisDirective implements OnInit, OnDestroy, AfterViewChec
   public constructor(
     private readonly templateRef: TemplateRef<unknown>,
     private readonly viewContainer: ViewContainerRef,
-    private readonly resolver: ComponentFactoryResolver,
     private readonly renderer: Renderer2,
     private readonly ngZone: NgZone,
     @Inject(PLATFORM_ID) private platformId: Object
@@ -209,9 +200,6 @@ export class NestedEllipsisDirective implements OnInit, OnDestroy, AfterViewChec
     this.wordBoundaries = '[' + this.wordBoundaries.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&') + ']';
 
     // initialize view:
-    if (parseInt(VERSION.major, 10) < 13) {
-      this.legacyCompFactory = this.resolver.resolveComponentFactory(NestedEllipsisContentComponent);
-    }
     this.restoreView();
     this.previousDimensions = {
       width: this.elem.clientWidth,
@@ -309,17 +297,10 @@ export class NestedEllipsisDirective implements OnInit, OnDestroy, AfterViewChec
     this.templateView = this.templateRef.createEmbeddedView({});
     this.templateView.detectChanges();
 
-    let componentRef: ComponentRef<NestedEllipsisContentComponent>;
-    if (this.legacyCompFactory != null) {
-      componentRef = this.viewContainer.createComponent(
-        this.legacyCompFactory, null, this.viewContainer.injector, [this.templateView.rootNodes]
-      );
-    } else {
-      componentRef = this.viewContainer.createComponent(NestedEllipsisContentComponent, {
-        injector: this.viewContainer.injector,
-        projectableNodes: [this.templateView.rootNodes]
-      });
-    }
+    const componentRef = this.viewContainer.createComponent(NestedEllipsisContentComponent, {
+      injector: this.viewContainer.injector,
+      projectableNodes: [this.templateView.rootNodes]
+    });
     this.elem = componentRef.instance.elementRef.nativeElement;
     this.initialTextLength = this.currentLength;
 

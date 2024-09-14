@@ -27,9 +27,10 @@ const nodeTypesToProcess: number[] = [Node.TEXT_NODE, Node.ELEMENT_NODE];
  * and append characters (configurable, default '...') if so.
  */
 @Directive({
-  selector: '[nestedEllipsis]',
-  exportAs: 'ngxNestedEllipsis'
-  })
+    selector: '[nestedEllipsis]',
+    exportAs: 'ngxNestedEllipsis',
+    standalone: true
+})
 export class NestedEllipsisDirective implements OnInit, OnDestroy, AfterViewChecked {
   /**
    * The referenced element

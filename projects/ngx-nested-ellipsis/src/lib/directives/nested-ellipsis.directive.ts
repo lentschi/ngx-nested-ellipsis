@@ -10,18 +10,17 @@ import {
   PLATFORM_ID,
   TemplateRef,
   ViewContainerRef,
-  ComponentFactoryResolver,
   EmbeddedViewRef,
   AfterViewChecked,
   OnInit,
-  ComponentFactory,
-  ComponentRef
 } from '@angular/core';
-import { isPlatformBrowser, VERSION } from '@angular/common';
+import { isPlatformBrowser } from '@angular/common';
 import { NestedEllipsisContentComponent } from '../components/nested-ellipsis-content.component';
 import { EllipsisResizeDetectionEnum } from '../enums/ellipsis-resize-detection.enum';
 import { Subject } from 'rxjs';
 import { take } from 'rxjs/operators';
+
+const nodeTypesToProcess: number[] = [Node.TEXT_NODE, Node.ELEMENT_NODE];
 
 /**
  * Directive to truncate the contained text, if it exceeds the element's boundaries
@@ -29,18 +28,14 @@ import { take } from 'rxjs/operators';
  */
 @Directive({
   selector: '[nestedEllipsis]',
-  exportAs: 'ngxNestedEllipsis'
-})
+  exportAs: 'ngxNestedEllipsis',
+  standalone: true
+  })
 export class NestedEllipsisDirective implements OnInit, OnDestroy, AfterViewChecked {
   /**
    * The referenced element
    */
   private elem?: HTMLElement;
-
-  /**
-   * Component factory required for rendering EllipsisContent component in angular < 13
-   */
-   private legacyCompFactory?: ComponentFactory<NestedEllipsisContentComponent>;
 
   /**
    * ViewRef of the main template (the one to be truncated)
@@ -170,7 +165,6 @@ export class NestedEllipsisDirective implements OnInit, OnDestroy, AfterViewChec
   public constructor(
     private readonly templateRef: TemplateRef<unknown>,
     private readonly viewContainer: ViewContainerRef,
-    private readonly resolver: ComponentFactoryResolver,
     private readonly renderer: Renderer2,
     private readonly ngZone: NgZone,
     @Inject(PLATFORM_ID) private platformId: Object
@@ -207,9 +201,6 @@ export class NestedEllipsisDirective implements OnInit, OnDestroy, AfterViewChec
     this.wordBoundaries = '[' + this.wordBoundaries.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&') + ']';
 
     // initialize view:
-    if (parseInt(VERSION.major, 10) < 13) {
-      this.legacyCompFactory = this.resolver.resolveComponentFactory(NestedEllipsisContentComponent);
-    }
     this.restoreView();
     this.previousDimensions = {
       width: this.elem.clientWidth,
@@ -307,17 +298,10 @@ export class NestedEllipsisDirective implements OnInit, OnDestroy, AfterViewChec
     this.templateView = this.templateRef.createEmbeddedView({});
     this.templateView.detectChanges();
 
-    let componentRef: ComponentRef<NestedEllipsisContentComponent>;
-    if (this.legacyCompFactory != null) {
-      componentRef = this.viewContainer.createComponent(
-        this.legacyCompFactory, null, this.viewContainer.injector, [this.templateView.rootNodes]
-      );
-    } else {
-      componentRef = this.viewContainer.createComponent(NestedEllipsisContentComponent, {
-        injector: this.viewContainer.injector,
-        projectableNodes: [this.templateView.rootNodes]
-      });
-    }
+    const componentRef = this.viewContainer.createComponent(NestedEllipsisContentComponent, {
+      injector: this.viewContainer.injector,
+      projectableNodes: [this.templateView.rootNodes]
+    });
     this.elem = componentRef.instance.elementRef.nativeElement;
     this.initialTextLength = this.currentLength;
 
@@ -405,7 +389,7 @@ export class NestedEllipsisDirective implements OnInit, OnDestroy, AfterViewChec
   private truncateContents(max: number): Node {
     this.restoreView();
     const nodes = <(HTMLElement | CharacterData)[]>this.flattenTextAndElementNodes(this.elem)
-      .filter(node => [Node.TEXT_NODE, Node.ELEMENT_NODE].includes(node.nodeType));
+      .filter(node => nodeTypesToProcess.includes(node.nodeType));
 
     let foundIndex = -1;
     let foundNode: Node;
@@ -459,7 +443,7 @@ export class NestedEllipsisDirective implements OnInit, OnDestroy, AfterViewChec
 
   private get currentLength(): number {
     return this.flattenTextAndElementNodes(this.elem)
-      .filter(node => [Node.TEXT_NODE, Node.ELEMENT_NODE].includes(node.nodeType))
+      .filter(node => nodeTypesToProcess.includes(node.nodeType))
       .map(node => (node instanceof CharacterData) ? node.data.length : 1)
       .reduce((sum, length) => sum + length, 0);
   }

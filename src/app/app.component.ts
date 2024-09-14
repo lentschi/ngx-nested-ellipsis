@@ -1,10 +1,14 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { NgIf } from '@angular/common';
+import { NestedEllipsisDirective } from '../../projects/ngx-nested-ellipsis/src/lib/directives/nested-ellipsis.directive';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
-})
+  styleUrls: ['./app.component.css'],
+  standalone: true,
+  imports: [NestedEllipsisDirective, NgIf]
+  })
 export class AppComponent implements OnInit, OnDestroy {
   longText = '<em>Lorem ipsum</em> dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt \
               ut labore et dolore magna \

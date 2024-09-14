@@ -14,7 +14,7 @@ import {
   AfterViewChecked,
   OnInit,
 } from '@angular/core';
-import { isPlatformBrowser, VERSION } from '@angular/common';
+import { isPlatformBrowser } from '@angular/common';
 import { NestedEllipsisContentComponent } from '../components/nested-ellipsis-content.component';
 import { EllipsisResizeDetectionEnum } from '../enums/ellipsis-resize-detection.enum';
 import { Subject } from 'rxjs';
@@ -27,10 +27,10 @@ const nodeTypesToProcess: number[] = [Node.TEXT_NODE, Node.ELEMENT_NODE];
  * and append characters (configurable, default '...') if so.
  */
 @Directive({
-    selector: '[nestedEllipsis]',
-    exportAs: 'ngxNestedEllipsis',
-    standalone: true
-})
+  selector: '[nestedEllipsis]',
+  exportAs: 'ngxNestedEllipsis',
+  standalone: true
+  })
 export class NestedEllipsisDirective implements OnInit, OnDestroy, AfterViewChecked {
   /**
    * The referenced element

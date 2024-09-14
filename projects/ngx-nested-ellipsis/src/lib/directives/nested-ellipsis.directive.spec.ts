@@ -1,6 +1,7 @@
-import { TestBed, async } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { Component } from '@angular/core';
 import { NestedEllipsisDirective } from './nested-ellipsis.directive';
+import { NgStyle } from '@angular/common';
 
 jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
 
@@ -15,23 +16,24 @@ const ELLIPSIS_TEST_CSS = `
 
 
 @Component({
-    selector: 'ellipsis-test-cmp',
-    template: `
+  selector: 'ellipsis-test-cmp',
+  template: `
     <div style="width: 100px; height:50px;" id="ellipsisTest">
       <ng-template nestedEllipsis>
         Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt
       </ng-template>
     </div>
   `,
-    styles: [ELLIPSIS_TEST_CSS],
-    standalone: true
-})
+  styles: [ELLIPSIS_TEST_CSS],
+  imports: [NestedEllipsisDirective],
+  standalone: true
+  })
 class StaticTestComponent {
 }
 
 @Component({
-    selector: 'ellipsis-test-cmp',
-    template: `
+  selector: 'ellipsis-test-cmp',
+  template: `
     <div [ngStyle]="styles"
         id="ellipsisTestDynamic">
       <ng-template nestedEllipsis
@@ -39,9 +41,10 @@ class StaticTestComponent {
         (nestedEllipsisChange)="onEllipsisChange($event)">{{htmlContent}}</ng-template>
     </div>
   `,
-    styles: [ELLIPSIS_TEST_CSS],
-    standalone: true
-})
+  styles: [ELLIPSIS_TEST_CSS],
+  imports: [NestedEllipsisDirective, NgStyle],
+  standalone: true
+  })
 class DynamicTestComponent {
   htmlContent = '<b>Lorem ipsum</b> dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt';
   wordBoundaries = ' \n';
@@ -54,43 +57,44 @@ class DynamicTestComponent {
 }
 
 @Component({
-    selector: 'ellipsis-number-test-cmp',
-    template: `
+  selector: 'ellipsis-number-test-cmp',
+  template: `
     <div
         style="width: 100px; height:100px;"
         id="ellipsisNumberTestDynamic">
       <ng-template nestedEllipsis>{{htmlContent}}</ng-template>
     </div>
   `,
-    styles: [ELLIPSIS_TEST_CSS],
-    standalone: true
-})
+  styles: [ELLIPSIS_TEST_CSS],
+  imports: [NestedEllipsisDirective],
+  standalone: true
+  })
 class NumberTestComponent {
   htmlContent = 0;
 }
 
 describe('NestedEllipsisDirective', () => {
 
-  beforeEach(async(() => {
+  beforeEach(() => {
     TestBed.configureTestingModule({
-    imports: [DynamicTestComponent,
+      imports: [DynamicTestComponent,
         NumberTestComponent,
         StaticTestComponent,
         NestedEllipsisDirective],
-    providers: []
-});
-  }));
+      providers: []
+    });
+  });
 
-  it('should create a ellipsis', async(async () => {
+  it('should create a ellipsis', async () => {
     const fixture = TestBed.createComponent(StaticTestComponent);
     fixture.detectChanges();
     await fixture.whenStable();
     const compiled = fixture.debugElement.nativeElement;
     const ellipsisDiv = compiled.querySelector('#ellipsisTest > nested-ellipsis-content');
     expect(ellipsisDiv.innerHTML.trim()).toBe('Lorem ipsum dolor sit ame...');
-  }));
+  });
 
-  it('should emit details about the ellipsis', async(async () => {
+  it('should emit details about the ellipsis', async () => {
     const fixture = TestBed.createComponent(DynamicTestComponent);
     const componentInstance = fixture.componentInstance;
     const changeSpy = spyOn(componentInstance, 'onEllipsisChange');
@@ -111,9 +115,9 @@ describe('NestedEllipsisDirective', () => {
     expect(changeSpy.calls.count()).toBe(3);
     expect(changeSpy.calls.mostRecent().args.length).toBe(1);
     expect(changeSpy.calls.mostRecent().args[0]).toEqual(63);
-  }));
+  });
 
-  it('should create a ellipsis escaping html content', async(async () => {
+  it('should create a ellipsis escaping html content', async () => {
     const fixture = TestBed.createComponent(DynamicTestComponent);
     const componentInstance = fixture.componentInstance;
 
@@ -146,9 +150,9 @@ describe('NestedEllipsisDirective', () => {
     await fixture.whenStable();
     ellipsisDiv = compiled.querySelector('#ellipsisTestDynamic > nested-ellipsis-content');
     expect(ellipsisDiv.innerText).toBe('C\'est l\'homme&nbsp;qui a vu <b>l\'homme</b> qui a vu l\'...');
-  }));
+  });
 
-  it('should handle null graciously', async(async () => {
+  it('should handle null graciously', async () => {
     const fixture = TestBed.createComponent(DynamicTestComponent);
     const componentInstance = fixture.componentInstance;
 
@@ -163,9 +167,9 @@ describe('NestedEllipsisDirective', () => {
     await fixture.whenStable();
     ellipsisDiv = compiled.querySelector('#ellipsisTestDynamic > nested-ellipsis-content');
     expect(ellipsisDiv.innerText).toBe('');
-  }));
+  });
 
-  it('should handle numbers graciously', async(async () => {
+  it('should handle numbers graciously', async () => {
     const numberFixture = TestBed.createComponent(NumberTestComponent);
     const numberComponentInstance = numberFixture.componentInstance;
 
@@ -186,7 +190,7 @@ describe('NestedEllipsisDirective', () => {
     await numberFixture.whenStable();
     ellipsisDiv = compiled.querySelector('#ellipsisNumberTestDynamic > nested-ellipsis-content');
     expect(ellipsisDiv.innerText).toBe('3.141592653...');
-  }));
+  });
 });
 
 
